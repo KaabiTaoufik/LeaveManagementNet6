@@ -1,4 +1,4 @@
-﻿@model IEnumerable<LeaveManagement.web.Data.LeaveType>
+﻿@model IEnumerable<LeaveManagement.web.Models.LeaveTypeVM>
 
 
 <!DOCTYPE html>
@@ -24,9 +24,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.DefaultDays)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateCreated)
-            </th>
             <th></th>
         </tr>
     </thead>
@@ -41,9 +38,6 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.DefaultDays)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateCreated)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

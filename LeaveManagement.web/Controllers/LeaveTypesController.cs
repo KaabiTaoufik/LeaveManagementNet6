@@ -6,24 +6,33 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using LeaveManagement.web.Data;
+using AutoMapper;
+using LeaveManagement.web.Models;
 
 namespace LeaveManagement.web.Controllers
 {
     public class LeaveTypesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
 
-        public LeaveTypesController(ApplicationDbContext context)
+        public LeaveTypesController(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         // GET: LeaveTypes
         public async Task<IActionResult> Index()
         {
-              return _context.LeaveTypes != null ? 
-                          View(await _context.LeaveTypes.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.LeaveTypes'  is null.");
+            var leaveTypes = _context.LeaveTypes;
+            if (leaveTypes != null)
+            {
+                var leaveTypesVM = _mapper.Map<List<LeaveTypeVM>>(await leaveTypes.ToListAsync());
+                return View(leaveTypesVM);
+            }
+
+            return Problem("Entity set 'ApplicationDbContext.LeaveTypes'  is null.");
         }
 
         // GET: LeaveTypes/Details/5
@@ -149,14 +158,14 @@ namespace LeaveManagement.web.Controllers
             {
                 _context.LeaveTypes.Remove(leaveType);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool LeaveTypeExists(int id)
         {
-          return (_context.LeaveTypes?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.LeaveTypes?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }
