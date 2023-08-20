@@ -2,10 +2,8 @@
 
 namespace LeaveManagement.web.Models
 {
-    public class LeaveTypeVM
+    public class CreateLeaveTypeVM
     {
-        public int Id { get; set; }
-
         [Display(Name = "Leave Name")]
         [Required]
         public string Name { get; set; }
@@ -15,6 +13,7 @@ namespace LeaveManagement.web.Models
 
         [Display(Name = "Deafult Number Of Days")]
         [Required]
+        [Range(1,25)]
         public int DefaultDays { get; set; }
     }
 }

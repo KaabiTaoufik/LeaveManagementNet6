@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using LeaveManagement.web.Data;
 using AutoMapper;
@@ -64,15 +59,16 @@ namespace LeaveManagement.web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Description,DefaultDays,Id,DateCreated,DateUpdated")] LeaveType leaveType)
+        public async Task<IActionResult> Create([Bind("Name,Description,DefaultDays")] CreateLeaveTypeVM leaveTypeVM)
         {
             if (ModelState.IsValid)
             {
+                var leaveType = _mapper.Map<LeaveType>(leaveTypeVM);
                 _context.Add(leaveType);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(leaveType);
+            return View(leaveTypeVM);
         }
 
         // GET: LeaveTypes/Edit/5
@@ -88,7 +84,7 @@ namespace LeaveManagement.web.Controllers
             {
                 return NotFound();
             }
-            return View(leaveType);
+            return View(_mapper.Map<EditLeaveTypeVM>(leaveType));
         }
 
         // POST: LeaveTypes/Edit/5
@@ -96,9 +92,9 @@ namespace LeaveManagement.web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Name,Description,DefaultDays,Id,DateCreated,DateUpdated")] LeaveType leaveType)
+        public async Task<IActionResult> Edit(int id, [Bind("Name,Description,DefaultDays,Id")] EditLeaveTypeVM leaveTypeVM)
         {
-            if (id != leaveType.Id)
+            if (id != leaveTypeVM.Id)
             {
                 return NotFound();
             }
@@ -107,12 +103,13 @@ namespace LeaveManagement.web.Controllers
             {
                 try
                 {
+                    var leaveType = _mapper.Map<LeaveType>(leaveTypeVM);
                     _context.Update(leaveType);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!LeaveTypeExists(leaveType.Id))
+                    if (!LeaveTypeExists(leaveTypeVM.Id))
                     {
                         return NotFound();
                     }
@@ -123,7 +120,7 @@ namespace LeaveManagement.web.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(leaveType);
+            return View(leaveTypeVM);
         }
 
         // GET: LeaveTypes/Delete/5
