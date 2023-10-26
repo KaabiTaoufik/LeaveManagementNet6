@@ -131,7 +131,7 @@ namespace LeaveManagement.web.Controllers
                 return NotFound();
             }
 
-            return View(leaveType);
+            return View(await leaveType);
         }
 
         // POST: LeaveTypes/Delete/5
