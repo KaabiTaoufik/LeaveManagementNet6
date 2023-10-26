@@ -4,6 +4,7 @@ using AutoMapper;
 using LeaveManagement.web.Configurations;
 using LeaveManagement.web.Contracts;
 using LeaveManagement.web.Repositories;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
