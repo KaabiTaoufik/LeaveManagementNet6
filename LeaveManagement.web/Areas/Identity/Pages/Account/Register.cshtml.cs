@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using LeaveManagement.web.Constants;
 
 namespace LeaveManagement.web.Areas.Identity.Pages.Account
 {
@@ -134,6 +135,12 @@ namespace LeaveManagement.web.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+                    var addRoleResponse = await _userManager.AddToRoleAsync(user, UserRole.User);
+                    if(!addRoleResponse.Succeeded)
+                    {
+                        _logger.LogInformation("User role wasn't added.");
+                        _logger.LogError(addRoleResponse.Errors.ToString());
+                    }
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
