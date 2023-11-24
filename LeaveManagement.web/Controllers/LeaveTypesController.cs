@@ -14,11 +14,13 @@ namespace LeaveManagement.web.Controllers
     {
         private readonly IMapper _mapper;
         private readonly ILeaveTypeRepository _leaveTypeRepository;
+        private readonly ILeaveAllocationRepository _leaveAllocationRepository;
 
-        public LeaveTypesController(IMapper mapper, ILeaveTypeRepository leaveTypeRepository)
+        public LeaveTypesController(IMapper mapper, ILeaveTypeRepository leaveTypeRepository, ILeaveAllocationRepository leaveAllocationRepository)
         {
-            _mapper = mapper;
-            _leaveTypeRepository = leaveTypeRepository;
+            this._mapper = mapper;
+            this._leaveTypeRepository = leaveTypeRepository;
+            this._leaveAllocationRepository = leaveAllocationRepository;
         }
 
         // GET: LeaveTypes
@@ -146,6 +148,33 @@ namespace LeaveManagement.web.Controllers
             if (leaveType != null)
             {
                 await _leaveTypeRepository.DeleteAsync(id);
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        // GET: LeaveTypes/AllocateLeave/5
+        public async Task<IActionResult> AllocateLeave(int id)
+        {
+            //await _leaveAllocationRepository.LeaveAllocation(id);
+            var leaveType = await _leaveTypeRepository.GetAsync(id);
+            if (leaveType != null)
+            {
+                RedirectToAction(nameof(Index));
+            }
+
+            return View(leaveType);
+        }
+
+        // POST: LeaveTypes/AllocateLeave/5
+        [HttpPost, ActionName("AllocateLeave")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AllocateLeaveConfirmed(int id)
+        {
+            var leaveType = await _leaveTypeRepository.GetAsync(id);
+            if (leaveType != null)
+            {
+                await _leaveAllocationRepository.LeaveAllocation(id);
             }
 
             return RedirectToAction(nameof(Index));

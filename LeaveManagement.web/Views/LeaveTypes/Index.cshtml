@@ -41,8 +41,9 @@
                         @Html.DisplayFor(modelItem => item.DefaultDays)
                     </td>
                     <td>
-                        <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Id"> <i class="fa-solid fa-pencil"></i> Edit</a> |
-                        <a class="btn btn-info" asp-action="Details" asp-route-id="@item.Id"> <i class="fa-solid fa-circle-info"></i> Details</a> |
+                        <a class="btn btn-primary" asp-action="AllocateLeave" asp-route-id="@item.Id"> Allocate Leave</a>
+                        <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Id"> <i class="fa-solid fa-pencil"></i> Edit</a>
+                        <a class="btn btn-info" asp-action="Details" asp-route-id="@item.Id"> <i class="fa-solid fa-circle-info"></i> Details</a>
                         <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id"> <i class="fa-solid fa-delete-left"></i> Delete</a>
                     </td>
                 </tr>

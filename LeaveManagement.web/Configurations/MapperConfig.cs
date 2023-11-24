@@ -10,6 +10,7 @@ namespace LeaveManagement.web.Configurations
             CreateMap<LeaveType, LeaveTypeVM>().ReverseMap();
             CreateMap<CreateLeaveTypeVM, LeaveType>();
             CreateMap<EditLeaveTypeVM, LeaveType>().ReverseMap();
+            CreateMap<Employee, EmployeeVM>().ReverseMap();
         }
     }
 }
