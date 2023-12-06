@@ -50,7 +50,7 @@ pipeline {
             steps {
                 script {
                     sh '''
-                        $connectionString=$('terraform output -json connection_string | jq -r ".[0].value"')
+                        $connectionString=$(terraform output -json connection_string | jq -r ".[0].value")
                         dotnet ef database update --conection "$connectionString" --project LeaveManagement.web/LeaveManagement.web.csproj
                     '''
                 }
