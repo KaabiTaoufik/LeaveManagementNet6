@@ -53,8 +53,8 @@ resource "azurerm_linux_web_app" "web_app" {
 
 resource "azurerm_mssql_server" "sql" {
   name                         = "leave-management-sql-server"
-  resource_group_name          = azurerm_resource_group.rg.name
-  location                     = azurerm_resource_group.rg.location
+  resource_group_name          = azurerm_resource_group.resource_group.name
+  location                     = azurerm_resource_group.resource_group.location
 
   administrator_login          = var.sql_admin_login
   administrator_login_password = var.sql_admin_password
