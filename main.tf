@@ -35,6 +35,13 @@ resource "azurerm_mssql_server" "sql" {
   administrator_login_password = var.sql_admin_password
 }
 
+resource "azurerm_mssql_firewall_rule" "firewall" {
+  name             = "AllowJenkins"
+  server_id        = azurerm_mssql_server.sql.id
+  start_ip_address = "23.97.197.37"
+  end_ip_address   = "23.97.197.37"
+}
+
 resource "azurerm_mssql_database" "db" {
   name           = "leave-management-sql-db"
   server_id      = azurerm_mssql_server.sql.id
