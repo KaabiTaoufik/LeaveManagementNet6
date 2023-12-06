@@ -46,6 +46,15 @@ pipeline {
             }
         }
 
+        stage('Update Database') {
+            steps {
+                script {
+                    def connectionString = sh(script: 'terraform output -raw connection_string', returnStdout: true).trim()
+                    sh 'dotnet ef database update --conection "$connectionString" --project LeaveManagement.web/LeaveManagement.web.csproj'
+                }
+            }
+        }
+
         stage('Docker Build') {
             steps {
                 script {
