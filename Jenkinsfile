@@ -49,8 +49,10 @@ pipeline {
         stage('Update Database') {
             steps {
                 script {
-                    def connectionString = sh(script: 'terraform output -json connection_string | jq -r ".[0].value"', returnStdout: true).trim()
-                    sh 'dotnet ef database update --conection "$connectionString" --project LeaveManagement.web/LeaveManagement.web.csproj'
+                    sh '''
+                        $connectionString=$('terraform output -json connection_string | jq -r ".[0].value"')
+                        dotnet ef database update --conection "$connectionString" --project LeaveManagement.web/LeaveManagement.web.csproj
+                    '''
                 }
             }
         }
