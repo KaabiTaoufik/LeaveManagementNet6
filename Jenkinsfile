@@ -8,6 +8,7 @@ pipeline {
     environment {
         ARM = credentials('b8989b85-3121-4662-bea6-7d41277deba9')
         ARM_ACCESS_KEY = credentials('37b62107-d4a3-430b-beaf-3cc32187d553')
+        DB_ADMIN = credentials('2e8b7929-7c59-4b33-ba4f-b2bcc40f173b')
     }
 
     stages {
@@ -27,23 +28,23 @@ pipeline {
             }
         }
 
-        // stage('Terraform Setup') {
-        //     steps {
-        //         script {
-        //             sh '''
-        //                 terraform init -input=false -backend-config="access_key=$ARM_ACCESS_KEY" -var "client_id=$ARM_CLIENT_ID" -var "client_secret=$ARM_CLIENT_SECRET" -var "subscription_id=$ARM_SUBSCRIPTION_ID" -var "tenant_id=$ARM_TENANT_ID"
-        //             '''
-        //         }
-        //     }
-        // }
+        stage('Terraform Setup') {
+            steps {
+                script {
+                    sh '''
+                        terraform init -input=false -backend-config="access_key=$ARM_ACCESS_KEY" -var "client_id=$ARM_CLIENT_ID" -var "client_secret=$ARM_CLIENT_SECRET" -var "subscription_id=$ARM_SUBSCRIPTION_ID" -var "tenant_id=$ARM_TENANT_ID" -var "sql_admin_login=$DB_ADMIN_USR" -var "sql_admin_password=$DB_ADMIN_PSW"
+                    '''
+                }
+            }
+        }
 
-        // stage('Terraform Apply') {
-        //     steps {
-        //         script {
-        //             sh 'terraform apply -input=false -auto-approve -var "client_id=$ARM_CLIENT_ID" -var "client_secret=$ARM_CLIENT_SECRET" -var "subscription_id=$ARM_SUBSCRIPTION_ID" -var "tenant_id=$ARM_TENANT_ID"'
-        //         }
-        //     }
-        // }
+        stage('Terraform Apply') {
+            steps {
+                script {
+                    sh 'terraform apply -input=false -auto-approve -var "client_id=$ARM_CLIENT_ID" -var "client_secret=$ARM_CLIENT_SECRET" -var "subscription_id=$ARM_SUBSCRIPTION_ID" -var "tenant_id=$ARM_TENANT_ID" -var "sql_admin_login=$DB_ADMIN_USR" -var "sql_admin_password=$DB_ADMIN_PSW"'
+                }
+            }
+        }
 
         stage('Docker Build') {
             steps {
@@ -62,14 +63,14 @@ pipeline {
             }
         }
 
-        // stage('Azure Deploy') {
-        //     steps {
-        //         script {
-        //             sh 'az login --service-principal -u $ARM_CLIENT_ID -p $ARM_CLIENT_SECRET --tenant $ARM_TENANT_ID'
-        //             sh 'az webapp create --resource-group cd-test-rg --plan cd-app-service-plan --name cd-app-service --deployment-container-image-name alabenhmouda/cd-example'
-        //         }
-        //     }
-        // }
+        stage('Azure Deploy') {
+            steps {
+                script {
+                    sh 'az login --service-principal -u $ARM_CLIENT_ID -p $ARM_CLIENT_SECRET --tenant $ARM_TENANT_ID'
+                    sh 'az webapp create --resource-group leave-management-rg --plan leave-management-app-service-plan --name leave-management-app-service --deployment-container-image-name alabenhmouda/leave-management'
+                }
+            }
+        }
 
         stage('Cleanup') {
             steps {
