@@ -23,6 +23,12 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.4" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.11" />
+    <PackageReference Include="prometheus-net" Version="8.2.0" />
+    <PackageReference Include="prometheus-net.AspNetCore" Version="8.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Metrics\" />
   </ItemGroup>
 
 </Project>

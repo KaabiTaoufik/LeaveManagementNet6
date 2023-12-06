@@ -6,6 +6,7 @@ using LeaveManagement.web.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using LeaveManagement.web.Services;
+using Prometheus;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +31,9 @@ builder.Services.AddAutoMapper(typeof(MapperConfig));
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
 var app = builder.Build();
+
+// Enable the Prometheus metrics endpoint with the default '/metrics'
+app.UseMetricServer();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
